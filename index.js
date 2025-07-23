@@ -1,6 +1,5 @@
 const express = require('express');
 const cors = require('cors');
-
 const app = express();
 const PORT = process.env.PORT || 3000;
 
@@ -17,7 +16,7 @@ app.use((req, res, next) => {
     next();
 });
 
-// Rota principal para teste
+// Rota para teste
 app.get('/', (req, res) => {
     res.json({
         message: 'API Webhook Santander está funcionando!',
@@ -31,25 +30,25 @@ app.get('/', (req, res) => {
 
 // Rota do webhook principal do Santander
 app.post('/webhook', (req, res) => {
-    console.log('\n🔔 WEBHOOK RECEBIDO DO SANTANDER:');
+    console.log('\nWEBHOOK RECEBIDO DO SANTANDER:');
     console.log('='.repeat(50));
     console.log('Timestamp:', new Date().toISOString());
     console.log('Headers:', JSON.stringify(req.headers, null, 2));
     console.log('Payload:', JSON.stringify(req.body, null, 2));
     console.log('='.repeat(50));
-
-    // Aqui você processaria os dados do pagamento
+    
+    // Processar dados do pagamento
     const webhookData = req.body;
     
-    // Exemplo de estrutura esperada do Santander (ajuste conforme necessário)
+    // Exemplo de estrutura esperada do Santander
     if (webhookData) {
-        console.log('📊 DADOS PROCESSADOS:');
+        console.log('DADOS PROCESSADOS:');
         console.log('- ID da transação:', webhookData.transactionId || 'N/A');
         console.log('- Status:', webhookData.status || 'N/A');
         console.log('- Valor:', webhookData.amount || 'N/A');
         console.log('- Cliente:', webhookData.customer || 'N/A');
     }
-
+    
     // Resposta obrigatória para confirmar recebimento
     res.status(200).json({
         success: true,
@@ -61,7 +60,7 @@ app.post('/webhook', (req, res) => {
 
 // Rota alternativa caso o Santander use outro endpoint
 app.post('/webhook/santander', (req, res) => {
-    console.log('\n🔔 WEBHOOK SANTANDER (endpoint alternativo):');
+    console.log('\nWEBHOOK SANTANDER (endpoint alternativo):');
     console.log('Payload:', JSON.stringify(req.body, null, 2));
     
     res.status(200).json({
@@ -73,7 +72,7 @@ app.post('/webhook/santander', (req, res) => {
 
 // Rota para testar no Postman
 app.post('/test', (req, res) => {
-    console.log('\n🧪 TESTE DO POSTMAN:');
+    console.log('\nTESTE DO POSTMAN:');
     console.log('Body recebido:', JSON.stringify(req.body, null, 2));
     
     res.json({
@@ -84,7 +83,7 @@ app.post('/test', (req, res) => {
     });
 });
 
-// Rota GET para verificar logs (útil para debug)
+// Rota GET para verificar logs
 app.get('/status', (req, res) => {
     res.json({
         status: 'API Online',
@@ -115,10 +114,10 @@ app.use('*', (req, res) => {
 });
 
 app.listen(PORT, () => {
-    console.log(`🚀 API Webhook rodando na porta ${PORT}`);
-    console.log(`📍 URL local: http://localhost:${PORT}`);
-    console.log(`🔗 Endpoint webhook: http://localhost:${PORT}/webhook`);
-    console.log(`🧪 Endpoint teste: http://localhost:${PORT}/test`);
+    console.log(`API Webhook rodando na porta ${PORT}`);
+    console.log(`URL local: http://localhost:${PORT}`);
+    console.log(`Endpoint webhook: http://localhost:${PORT}/webhook`);
+    console.log(`Endpoint teste: http://localhost:${PORT}/test`);
 });
 
 module.exports = app;
